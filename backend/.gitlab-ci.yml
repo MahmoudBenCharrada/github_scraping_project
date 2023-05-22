@@ -1,0 +1,15 @@
+stages:
+    - build
+
+build:
+    image: bash
+    stage: build
+    variables:
+        CI_DEBUG_TRACE: "false"
+    script:
+        - echo "Bundle the project"
+        - "[ -d build ] || mkdir build"
+        - tar -cv -f build/ncg_backend.tgz --exclude ./__pycache__ --exclude .gitlab-ci.yaml --exclude ./build --exclude .git .
+    artifacts:
+        paths:
+        - build/ncg_backend.tgz
