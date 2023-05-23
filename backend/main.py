@@ -1,37 +1,19 @@
 from typing import List
 from fastapi import FastAPI, Path, HTTPException
-#from fastapi.logger import logger
-from pydantic import BaseModel
 from contextlib import contextmanager
 from pathlib import Path
+
 import sqlite3
 import logging
+import os
 
-"""Name of the database we use"""
-DB_NAME = "github.db"
+from backend.database.models import User, Repository
+
+# Name of the database we use
+DB_NAME = os.path.join(os.getcwd(), "backend", "database", "github.db")
 
 logger = logging.getLogger("uvicorn.error")
 logger.setLevel(logging.INFO)
-# import pdb; pdb.set_trace()
-
-#######################################################################################
-class User(BaseModel):
-    """User model"""
-
-    user_id: int
-    username: str
-
-
-class Repository(BaseModel):
-    """Repository model"""
-
-    repo_id: int
-    name: str
-    url: str
-    repo_owner: int
-
-
-#######################################################################################
 
 
 @contextmanager
@@ -46,8 +28,6 @@ def get_cursor() -> sqlite3.Cursor:
         con.commit()
         con.close()
 
-
-#######################################################################################
 
 app = FastAPI(debug=True)
 
