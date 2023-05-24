@@ -1,25 +1,26 @@
 <template>
   <div>
-    <ul>
-      <li v-for="item in users" :key="item.user_id">{{ item.username }}</li>
-    </ul>
-    <ul>
-      <li v-for="item in repos" :key="item.repo_id">{{ item.name }}</li>
-    </ul>
+    <DropDownMenu v-if="dataLoaded" :users=users :repos=repos />
   </div>
 </template>
 
 <script>
+import DropDownMenu from './components/DropdownSearchMenu.vue'
 export default {
+  components: {
+    DropDownMenu
+  },
   data() {
     return {
       users: [],
-      repos: []
+      repos: [],
+      dataLoaded: false
     };
   },
   async mounted() {
     this.users = await this.fetchData('/users');
     this.repos = await this.fetchData('/repos');
+    this.dataLoaded = true;
   },
   methods: {
     async fetchData(pathName) {

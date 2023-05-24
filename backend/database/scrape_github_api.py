@@ -23,20 +23,19 @@ args = parser.parse_args()
 
 
 # get user details
-user_details_template_url = "https://api.github.com/users/{username}"
-user_details_url = user_details_template_url.format(username = args.username)
+user_details_url = f"https://api.github.com/users/{args.username}"
 
 user_details = requests.get(user_details_url, timeout=5).json()
 
 user_id = user_details["id"]
 user_name = user_details["login"]
-user_repos = "https://api.github.com/users/makerGeek/repos"
+user_repos = f"https://api.github.com/users/{args.username}/repos"
 
 # user entry to be stored into Users table
 user_entry = [user_id, user_name]
 
 # get repo details
-repos = requests.get(user_repos, timeout=5).json()
+repos = requests.get(user_repos, timeout=10).json()
 
 # contain all repo entries to be stored into Repositories table
 repo_entires = []
@@ -50,7 +49,7 @@ for repo in repos:
     repo_entry = RepoEntry(repo_id, repo_name, repo_url)
     repo_entires.append(repo_entry)
 
-print("Collected repository data")
+print("Collected repository data: " + str(len(repos)))
 
 
 @contextmanager
